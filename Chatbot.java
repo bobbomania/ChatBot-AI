@@ -14,12 +14,20 @@ public class Chatbot extends JFrame {
     JFrame frame = new JFrame();
 
     String msgs = "";
+    String file = "C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt";
 
     Chatbot() {
         frame.setSize(1200, 900);
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try {
+            PrintWriter writer = new PrintWriter(file);
+            writer.print("");
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         init();
         listeners();
@@ -41,18 +49,18 @@ public class Chatbot extends JFrame {
             update();
             python();
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(500);
             } catch (Exception e) {
                 System.out.println(e);
             }
-            String answer = read("C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt");
+            String answer = read(file);
             msgs = msgs + "\n" + answer;
             msgArea.setText(msgs);
         });
     }
 
     public void update() {
-        write(type.getText(), "C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt");
+        write(type.getText(), file);
         msgs = msgs + "\n" + type.getText();
         msgArea.setText(msgs);
         type.setText("");
@@ -100,6 +108,6 @@ public class Chatbot extends JFrame {
     public static void main(String[] args) {
         Chatbot c1 = new Chatbot();
         c1.python();
-        System.out.println(read("C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt"));
+        System.out.println(read(c1.file));
     }
 }
