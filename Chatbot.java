@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 public class Chatbot extends JFrame {
 
@@ -38,6 +39,15 @@ public class Chatbot extends JFrame {
     public void listeners() {
         ok.addActionListener((ActionEvent arg0) -> {
             update();
+            python();
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            String answer = read("C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt");
+            msgs = msgs + "\n" + answer;
+            msgArea.setText(msgs);
         });
     }
 
@@ -87,16 +97,9 @@ public class Chatbot extends JFrame {
         return lastLine;
     }
 
-    
-
-    public void answer() {
-        String answer = new String();
-
-    }
-
     public static void main(String[] args) {
-        //Chatbot c1 = new Chatbot();
-        //c1.python();
+        Chatbot c1 = new Chatbot();
+        c1.python();
         System.out.println(read("C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt"));
     }
 }
