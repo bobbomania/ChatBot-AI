@@ -15,12 +15,15 @@ public class Chatbot extends JFrame {
 
     String msgs = "";
     String file = "C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt";
+    String subprogram = "C:\\Users\\piopi\\Documents\\Chatbot\\src\\ChatBot-AI-master\\testing.py";
 
     Chatbot() {
         frame.setSize(1200, 900);
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //clear file
         try {
             PrintWriter writer = new PrintWriter(file);
             writer.print("");
@@ -60,31 +63,44 @@ public class Chatbot extends JFrame {
     }
 
     public void update() {
-        write(type.getText(), file);
-        msgs = msgs + "\n" + type.getText();
-        msgArea.setText(msgs);
-        type.setText("");
+        if (type.getText() != "") {
+            write(type.getText(), file);
+            msgs = msgs + "\n" + type.getText();
+            msgArea.setText(msgs);
+            type.setText("");
+        }
     }
 
     public void python() {
         try {
-            String command = "python /c start python C:\\Users\\piopi\\Documents\\Chatbot\\src\\ChatBot-AI-master\\chatBot.py";
-            Process p = Runtime.getRuntime().exec(command);
+            String prg = "def main():\n"
+                    + "    f = open(\"C:\\\\Users\\\\piopi\\\\Documents\\\\Chatbot\\\\src\\\\meta.txt\", \"a+\")\n"
+                    + "\n"
+                    + "    f.write(\"Python answer \\n\")\n"
+                    + "\n"
+                    + "    f.close()\n"
+                    + "\n"
+                    + "main()";
+            BufferedWriter out = new BufferedWriter(new FileWriter(subprogram));
+            out.write(prg);
+            out.close();
+            Process p = Runtime.getRuntime().exec("python " + subprogram);
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String ret = in.readLine();
+            System.out.println("value is : " + ret);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public static void write(String question, String directory) {
-        try {
-            FileWriter fw = new FileWriter(directory);
-            fw.write(question);
-            fw.flush();
-            fw.close();
-        } catch (Exception e) {
+        try (FileWriter fw = new FileWriter(directory, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+            out.println(question);
+        } catch (IOException e) {
             System.out.println(e);
         }
-        System.out.println("Success...");
     }
 
     public static String read(String directory) {
@@ -107,7 +123,6 @@ public class Chatbot extends JFrame {
 
     public static void main(String[] args) {
         Chatbot c1 = new Chatbot();
-        c1.python();
         System.out.println(read(c1.file));
     }
 }
