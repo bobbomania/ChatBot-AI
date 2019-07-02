@@ -1,6 +1,7 @@
+package chatbot;
+
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.FileWriter;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
@@ -12,8 +13,8 @@ public class Chatbot extends JFrame {
     JFrame frame = new JFrame();
 
     String msgs = "";
-    String file = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\meta.txt";
-    String subprogram = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\cmdPyhton.cmd";
+    String file = "src\\meta.txt";
+    String subprogram = "src\\testing.py";
 
     Chatbot() {
         frame.setSize(1200, 900);
@@ -35,12 +36,13 @@ public class Chatbot extends JFrame {
     }
 
     public void init() {
+
         msgArea.setBounds(50, 50, 800, 600);
-        frame.add(msgArea);
+        frame.add(msgArea, new Integer(1));
         type.setBounds(50, 800, 800, 30);
-        frame.add(type);
+        frame.add(type, new Integer(1));
         ok.setBounds(900, 800, 100, 30);
-        frame.add(ok);
+        frame.add(ok, new Integer(1));
 
         msgArea.setEditable(false);
     }
@@ -50,12 +52,12 @@ public class Chatbot extends JFrame {
             update();
             python();
             try {
-                TimeUnit.MILLISECONDS.sleep(2000);
+                TimeUnit.MILLISECONDS.sleep(500);
             } catch (Exception e) {
                 System.out.println(e);
             }
             String answer = read(file);
-            msgs = msgs + "\n" + answer;
+            msgs = msgs + "\n" + split("AI: " + answer);
             msgArea.setText(msgs);
         });
     }
@@ -63,7 +65,7 @@ public class Chatbot extends JFrame {
     public void update() {
         if (type.getText() != "") {
             write(type.getText(), file);
-            msgs = msgs + "\n" + type.getText();
+            msgs = msgs + "\n" + split("You: " + type.getText());
             msgArea.setText(msgs);
             type.setText("");
         }
@@ -71,8 +73,21 @@ public class Chatbot extends JFrame {
 
     public void python() {
         try {
-        Runtime.getRuntime().exec(subprogram, null, new File("C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\"));            
-
+            String prg = "def main():\n"
+                    + "    f = open(\"C:\\\\Users\\\\piopi\\\\Documents\\\\Chatbot\\\\src\\\\meta.txt\", \"a+\")\n"
+                    + "\n"
+                    + "    f.write(\"Python answer \\n\")\n"
+                    + "\n"
+                    + "    f.close()\n"
+                    + "\n"
+                    + "main()";
+            BufferedWriter out = new BufferedWriter(new FileWriter(subprogram));
+            out.write(prg);
+            out.close();
+            Process p = Runtime.getRuntime().exec("python " + subprogram);
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String ret = in.readLine();
+            System.out.println("value is : " + ret);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -97,7 +112,6 @@ public class Chatbot extends JFrame {
             BufferedReader br = new BufferedReader(new FileReader(directory));
 
             while ((sCurrentLine = br.readLine()) != null) {
-                //System.out.println(sCurrentLine);
                 lastLine = sCurrentLine;
             }
         } catch (IOException e) {
@@ -106,8 +120,17 @@ public class Chatbot extends JFrame {
         return lastLine;
     }
 
+    public String split(String text) {
+        String output = "";
+        int index = 0;
+        while (index < text.length()) {
+            output = output + text.substring(index, Math.min(index + 100, text.length())) + "\n";
+            index += 100;
+        }
+        return output;
+    }
+
     public static void main(String[] args) {
         Chatbot c1 = new Chatbot();
-        System.out.println(read(c1.file));
     }
 }
