@@ -1,12 +1,10 @@
-package chatbot;
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
-public class Chatbot extends JFrame {
+public class GUI extends JFrame {
 
     JTextArea msgArea = new JTextArea();
     JTextField type = new JTextField();
@@ -14,10 +12,10 @@ public class Chatbot extends JFrame {
     JFrame frame = new JFrame();
 
     String msgs = "";
-    String file = "C:\\Users\\piopi\\Documents\\Chatbot\\src\\meta.txt";
-    String subprogram = "C:\\Users\\piopi\\Documents\\Chatbot\\src\\ChatBot-AI-master\\testing.py";
+    String file = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\meta.txt";
+    String subprogram = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\cmdPyhton.cmd";
 
-    Chatbot() {
+    GUI() {
         frame.setSize(1200, 900);
         frame.setLayout(null);
         frame.setVisible(true);
@@ -52,7 +50,7 @@ public class Chatbot extends JFrame {
             update();
             python();
             try {
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(2000);
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -73,21 +71,8 @@ public class Chatbot extends JFrame {
 
     public void python() {
         try {
-            String prg = "def main():\n"
-                    + "    f = open(\"C:\\\\Users\\\\piopi\\\\Documents\\\\Chatbot\\\\src\\\\meta.txt\", \"a+\")\n"
-                    + "\n"
-                    + "    f.write(\"Python answer \\n\")\n"
-                    + "\n"
-                    + "    f.close()\n"
-                    + "\n"
-                    + "main()";
-            BufferedWriter out = new BufferedWriter(new FileWriter(subprogram));
-            out.write(prg);
-            out.close();
-            Process p = Runtime.getRuntime().exec("python " + subprogram);
-            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String ret = in.readLine();
-            System.out.println("value is : " + ret);
+        Runtime.getRuntime().exec(subprogram, null, new File("C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\"));            
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -122,7 +107,7 @@ public class Chatbot extends JFrame {
     }
 
     public static void main(String[] args) {
-        Chatbot c1 = new Chatbot();
+        GUI c1 = new GUI();
         System.out.println(read(c1.file));
     }
 }
