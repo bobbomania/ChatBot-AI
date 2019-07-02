@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
-public class GUI extends JFrame {
+public class Chatbot extends JFrame {
 
     JTextArea msgArea = new JTextArea();
     JTextField type = new JTextField();
@@ -15,7 +15,7 @@ public class GUI extends JFrame {
     String file = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\meta.txt";
     String subprogram = "C:\\Users\\GT\\eclipse-workspace\\Chatbot\\src\\cmdPyhton.cmd";
 
-    GUI() {
+    Chatbot() {
         frame.setSize(1200, 900);
         frame.setLayout(null);
         frame.setVisible(true);
@@ -107,7 +107,7 @@ public class GUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        GUI c1 = new GUI();
+        Chatbot c1 = new Chatbot();
         System.out.println(read(c1.file));
     }
 }
